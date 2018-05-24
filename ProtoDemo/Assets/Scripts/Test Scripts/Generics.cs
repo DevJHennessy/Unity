@@ -1,0 +1,65 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class Generics : MonoBehaviour
+{
+	void Start()
+	{
+        //Mock.GameObject<SpriteRenderer> gameObject1 = new Mock.GameObject<SpriteRenderer>(new SpriteRenderer());
+
+        Mock.GameObject<CubeController> gameObject1 = new Mock.GameObject<CubeController>(new CubeController());
+
+        gameObject1.GetComponent();
+
+        Mock.GameObject gameObject2 = new Mock.GameObject();
+        gameObject2.AddComponent<Mock.SpriteRenderer>();
+
+        Mock.SpriteRenderer renderer = gameObject2.GetComponent<Mock.SpriteRenderer>();
+        renderer.Name = "Tabors";
+
+        Debug.Log("Component Name: " + gameObject2.component.Name);
+	}
+
+	void Update()
+	{
+	}
+}
+
+namespace Mock
+{
+    class GameObject<T>
+    {
+        T Component;
+
+        public GameObject(T init)
+        {
+            Component = init;
+        }
+
+        public void GetComponent()
+        {
+            Debug.Log("Generic GameObjects Component: " + Component.GetType()); 
+        }
+    }
+
+    class GameObject
+    {
+        public Component component;
+
+        public void AddComponent<T>() where T : Component, new()
+        {
+            component = new T();
+            component = (T)component;
+
+            Debug.Log("Added Component of tyoe: " + typeof(T));
+        }
+
+        public T GetComponent<T>() where T : Component
+        {
+            return (T)component;
+        }
+    }
+
+    class Component { public string Name; }
+    class SpriteRenderer : Component { }
+}
